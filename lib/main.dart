@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sampleapp/Bloc/main_bloc.dart';
+import 'package:sampleapp/GetX/main_get_x.dart';
+import 'package:sampleapp/Provider/main_provider.dart';
+import 'package:sampleapp/Redux/main_redux.dart';
 
 void main() {
   runApp( MultiProvider(
@@ -10,18 +14,6 @@ void main() {
   ),);
 }
 
-class Counter with ChangeNotifier{
-  int count = 0;
-  int get countV => count;
-  void increment(){
-    count++;
-    notifyListeners();
-  }
-  void decrement(){
-    count--;
-    notifyListeners();
-  }
-}
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -29,9 +21,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter State',
       theme: ThemeData.dark(),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter StateManagement'),
     );
   }
 }
@@ -59,12 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -75,51 +62,76 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '${context.watch<Counter>().count}',
-                style: const TextStyle(color: Colors.white,fontSize: 16)
-            ),
-          ],
+         children: [
+           Container(
+             width: MediaQuery.of(context).size.width-100,
+             child: ElevatedButton(
+                 style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all(Colors.green),
+                     padding:
+                     MaterialStateProperty.all(const EdgeInsets.all(20)),
+                     textStyle: MaterialStateProperty.all(
+                         const TextStyle(fontSize: 14, color: Colors.white))),
+                 onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FlutterProviderApp()));
+
+                 },
+                 child: const Text('Provider')),
+           ),
+
+           const SizedBox(height: 10,),
+           Container(
+             width: MediaQuery.of(context).size.width-100,
+             child: ElevatedButton(
+                 style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all(Colors.green),
+                     padding:
+                     MaterialStateProperty.all(const EdgeInsets.all(20)),
+                     textStyle: MaterialStateProperty.all(
+                         const TextStyle(fontSize: 14, color: Colors.white))),
+                 onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FlutterBlocApp()));
+
+                 },
+                 child: const Text('Bloc')),
+           ),
+           const SizedBox(height: 10,),
+           Container(
+             width: MediaQuery.of(context).size.width-100,
+             child: ElevatedButton(
+                 style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all(Colors.green),
+                     padding:
+                     MaterialStateProperty.all(const EdgeInsets.all(20)),
+                     textStyle: MaterialStateProperty.all(
+                         const TextStyle(fontSize: 14, color: Colors.white))),
+                 onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FlutterReduxApp()));
+
+                 },
+                 child: const Text('Redux')),
+           ),
+           const SizedBox(height: 10,),
+           Container(
+             width: MediaQuery.of(context).size.width-100,
+             child: ElevatedButton(
+                 style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all(Colors.green),
+                     padding:
+                     MaterialStateProperty.all(const EdgeInsets.all(20)),
+                     textStyle: MaterialStateProperty.all(
+                         const TextStyle(fontSize: 14, color: Colors.white))),
+                 onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FlutterGetApp()));
+                 },
+                 child: const Text('GetX')),
+           ),
+         ],
+
         ),
       ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-             context.read<Counter>().increment();
-            },
-          ),
-          const SizedBox(height: 4),
-         FloatingActionButton(
-           child: const Icon(Icons.remove),
-            onPressed: () {
-              context.read<Counter>().decrement();
-            },
-          ),
-        ],
-      ),
+
     );
   }
 }

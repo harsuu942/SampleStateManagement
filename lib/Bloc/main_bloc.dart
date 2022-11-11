@@ -25,14 +25,20 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 
-void main() {
+// void main() {
+//   runApp(const CounterPage());
+// }
 
-  runApp(const CounterPage());
+class FlutterBlocApp extends StatefulWidget {
+  const FlutterBlocApp({Key? key}) : super(key: key);
+
+  @override
+  State<FlutterBlocApp> createState() => _FlutterBlocAppState();
 }
 
-class CounterPage extends StatelessWidget {
+class _FlutterBlocAppState extends State<FlutterBlocApp> {
+
   /// {@macro counter_page}
-  const CounterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,38 +59,44 @@ class CounterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Counter')),
-        body: Center(
-          child: BlocBuilder<CounterBloc, int>(
-            builder: (context, count) {
-              return Text('You have pushed the button this many times:$count',
-                  style: const TextStyle(color: Colors.white,fontSize: 16));
-            },
-          ),
-        ),
-        floatingActionButton: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () {
-                context.read<CounterBloc>().add(CounterIncrementPressed());
-              },
+    return Scaffold(
+      appBar: AppBar(title: const Text('Bloc')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'You have pushed the button this many times  ',style: TextStyle(fontSize: 18),
             ),
-            const SizedBox(height: 4),
-            FloatingActionButton(
-              child: const Icon(Icons.remove),
-              onPressed: () {
-                context.read<CounterBloc>().add(CounterDecrementPressed());
+            BlocBuilder<CounterBloc, int>(
+              builder: (context, count) {
+                return Text(count.toString(),
+                    style: const TextStyle(color: Colors.white,fontSize: 16));
               },
             ),
           ],
         ),
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterIncrementPressed());
+            },
+            heroTag: "Bloc Increment",
+          ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.remove),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterDecrementPressed());
+            },
+            heroTag: "Bloc Decrement",
+          ),
+        ],
       ),
     );
   }

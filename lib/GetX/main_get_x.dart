@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:sampleapp/GetX/GetX_API/getx_api.dart';
 
 class Controller extends GetxController{
   var count = 0.obs;
@@ -43,6 +44,23 @@ class _FlutterGetAppState extends State<FlutterGetApp> {
                     '${c.count}',
                     style: const TextStyle(color: Colors.white,fontSize: 16)
                 ),
+
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  width: MediaQuery.of(context).size.width-100,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.green),
+                          padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(20)),
+                          textStyle: MaterialStateProperty.all(
+                              const TextStyle(fontSize: 14, color: Colors.white))),
+                      onPressed: () {
+                        Get.to(const GetXAPI());
+                      },
+                      child: const Text('GetX API',style: TextStyle(fontSize: 16),)),
+                ),
+
               ],
             ),
           )),

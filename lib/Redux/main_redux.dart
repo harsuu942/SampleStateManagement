@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:sampleapp/Model/json.dart';
+import 'package:sampleapp/Redux/Redux_API/redux_api.dart';
 
 // One simple action: Increment
 enum Actions { Increment,Decrement }
 
 // The reducer, which takes the previous count and increments it in response
 // to an Increment action.
-int counterReducer(int state, dynamic action) {
-  return action == Actions.Increment ? state + 1 : action ==
-      Actions.Decrement ? state -1 : state;
+AppState counterReducer(AppState state, dynamic action) {
+  return AppState(count: action == Actions.Increment ? state.count + 1 : action ==
+      Actions.Decrement ? state.count -1 : state.count,models: (action == Actions.Increment || action == Actions.Decrement)?[]:
+  jsonModels(state.models,action));
+}
+
+jsonModels(state,action) {
+  if (action is AppState) {
+    return action.models;
+  }
+}
+
+class AppState {
+  final int count;
+  final List<JSONModel> models;
+
+  AppState({required this.count, required this.models});
+
+  factory AppState.initial() {
+    return AppState(count: 0, models: []);
+  }
 }
 
 // void main() {
@@ -33,12 +53,12 @@ class FlutterReduxApp extends StatefulWidget {
 
 class _FlutterReduxAppState extends State<FlutterReduxApp> {
 
-  Store<int> store = Store<int>(counterReducer,initialState: 0);
+  Store<AppState> store = Store<AppState>(counterReducer,initialState: AppState.initial());
 
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<int>(
+    return StoreProvider<AppState>(
       // Pass the store to the StoreProvider. Any ancestor `StoreConnector`
       // Widgets will find and use this value as the `Store`.
       store: store,
@@ -51,15 +71,31 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> {
               const Text(
                 'You have pushed the button this many times  ',style: TextStyle(fontSize: 18),
               ),
-              StoreConnector<int, String>(
-                converter: (store) => store.state.toString(),
+              StoreConnector<AppState, String>(
+                converter: (store) => store.state.count.toString(),
                 builder: (context, count) {
                   return Text(
                       count,
                       style: TextStyle(color: Colors.white,fontSize: 16)
                   );
                 },
-              )
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                width: MediaQuery.of(context).size.width-100,
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.green),
+                        padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(20)),
+                        textStyle: MaterialStateProperty.all(
+                            const TextStyle(fontSize: 14, color: Colors.white))),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ReduxAPI()));
+
+                    },
+                    child: const Text('Redux API',style: TextStyle(fontSize: 16),)),
+              ),
             ],
           ),
         ),
@@ -68,7 +104,7 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            StoreConnector<int, VoidCallback>(
+            StoreConnector<AppState, VoidCallback>(
               converter: (store) {
                 // Return a `VoidCallback`, which is a fancy name for a function
                 // with no parameters and no return value.
@@ -86,7 +122,7 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> {
               },
             ),
             const SizedBox(height: 4),
-            StoreConnector<int, VoidCallback>(
+            StoreConnector<AppState, VoidCallback>(
               converter: (store) {
                 return () => store.dispatch(Actions.Decrement);
               },

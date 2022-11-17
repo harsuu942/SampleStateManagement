@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sampleapp/Bloc/Bloc_API/bloc_api.dart';
 
 /// Event being processed by [CounterBloc].
 abstract class CounterEvent {}
@@ -73,6 +74,22 @@ class CounterView extends StatelessWidget {
                 return Text(count.toString(),
                     style: const TextStyle(color: Colors.white,fontSize: 16));
               },
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width-100,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      padding:
+                      MaterialStateProperty.all(const EdgeInsets.all(20)),
+                      textStyle: MaterialStateProperty.all(
+                          const TextStyle(fontSize: 14, color: Colors.white))),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BlocAPI()));
+
+                  },
+                  child: const Text('Bloc API',style: TextStyle(fontSize: 16),)),
             ),
           ],
         ),

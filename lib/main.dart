@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sampleapp/Bloc/main_bloc.dart';
 import 'package:sampleapp/GetX/main_get_x.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter State',
       theme: ThemeData.dark(),
       home: const MyHomePage(title: 'Flutter StateManagement'),
